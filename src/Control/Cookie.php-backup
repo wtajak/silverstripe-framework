@@ -20,17 +20,6 @@ class Cookie
     private static $report_errors = true;
 
     /**
-     * @config
-     * @var string One of 'Strict', 'Lax', 'None', ''
-     */
-    private static $samesite = 'None';
-
-    /* CORE CHANGE
-     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite#lax
-     */
-    const SAMESITE_DEFAULT = 'None';
-
-    /**
      * Fetch the current instance of the cookie backend.
      *
      * @return Cookie_Backend
@@ -103,31 +92,4 @@ class Cookie
     {
         return self::get_inst()->forceExpiry($name, $path, $domain, $secure, $httpOnly);
     }
-
-
-    /**
-     * Get a valid SameSite atribute value
-     *
-     * @internal Not part of public api: for internal use only
-     *
-     * @param string|null $sameSite
-     * @param bool $allowEmpty Allow returning an empty string
-     * @return string
-     */
-    public static function get_valid_samesite_value(string $sameSite = null, $allowEmpty = true): string
-    {
-        $sameSite = trim($sameSite ?? '');
-
-        if ('' === $sameSite) {
-            return $allowEmpty ? '' : self::SAMESITE_DEFAULT;
-        }
-
-        $sameSite = ucfirst(strtolower($sameSite));
-        if (in_array($sameSite, ['Strict', 'Lax', 'None'], true)) {
-            return $sameSite;
-        }
-
-        return $allowEmpty ? '' : self::SAMESITE_DEFAULT;
-    }
 }
-

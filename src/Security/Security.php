@@ -218,7 +218,8 @@ class Security extends Controller implements TemplateGlobalProvider
         // Prevent clickjacking, see https://developer.mozilla.org/en-US/docs/HTTP/X-Frame-Options
         $frameOptions = static::config()->get('frame_options');
         if ($frameOptions) {
-            $this->getResponse()->addHeader('X-Frame-Options', $frameOptions);
+            // CORE CHANGE
+            // $this->getResponse()->addHeader('X-Frame-Options', $frameOptions);
         }
 
         // Prevent search engines from indexing the login page

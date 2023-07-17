@@ -63,7 +63,17 @@ class SessionAuthenticationHandler implements AuthenticationHandler
      */
     public function logIn(Member $member, $persistent = false, HTTPRequest $request = null)
     {
-        static::regenerateSessionId();
+	/* CORE CHANGE */
+        $platform = null;
+
+        if ($request) {
+          $platform = $request->getSession()->get('platform');
+        }
+
+        if (!$request || ($request && $platform !== 'projector' && $platform !== 'inactive-projector')) {
+            static::regenerateSessionId();
+        }
+
         $request = $request ?: Controller::curr()->getRequest();
         $request->getSession()->set($this->getSessionVariable(), $member->ID);
 
